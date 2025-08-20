@@ -1,0 +1,40 @@
+[package]
+name = "roadrunner"
+version = "0.0.1"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+containerd-shim = "0.3.0"
+containerd-shim-wasm = "0.1.1"
+log = "0.4.17"
+ttrpc = "0.7.1"
+chrono = "0.4.23"
+anyhow = "1.0.69"
+cap-std = "3.0.0"
+oci-spec = { version = "0.6.0", features = ["runtime"] }
+thiserror = "1.0.39"
+libc = "0.2.138"
+wasmedge-sdk = { version = "0.7.1", features = ["async"] }
+wasmprinter = "0.206.0"
+regex = "1.7.1"
+itertools = "0.12.1"
+walkdir = "2"
+hostname = "0.4.0"
+serde = { version= "1.0.159", features = ["derive"]}
+serde_json = "1.0.95"
+serde_derive = "1.0.159"
+redis = "0.25.3"
+uuid = {version = "1.8.0", features = ["v4"]}
+tokio = { version = "*", features = ["full"]}
+lazy_static = "1.4.0"
+reqwest = { version = "0.12.4", features = ["blocking"] }
+rand = "0.8.5"
+nix = "0.23.2"
+rayon = "1.5"
+tempfile = "3.17.1"
+
+[[bin]]
+name = "containerd-shim-rr-v1"
+path = "src/main.rs"
