@@ -31,17 +31,14 @@ Both files must exist and be executable. If not provided, shim copy steps will n
 
 ## How to Run the Installer
 
-1) Save your installer script (the one you already have) as:
-   ./quick-install.sh
-
-2) Make it executable:
+1) Make it executable:
    chmod +x ./quick-install.sh
 
-3) (Optional) Provide shim paths:
+2) (Optional) Provide shim paths:
    export SHIM_CWASI_SRC=experiments/evaluation/binaries/containerd-shim-cwasi-v1
    export SHIM_WASMEDGE_SRC=experiments/evaluation/binaries/wasmedge/
 
-4) Run as root:
+3Run as root:
    sudo ./quick-install.sh
 
 ## What the Script Does 
