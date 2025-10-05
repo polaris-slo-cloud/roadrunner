@@ -40,20 +40,79 @@ It supports the following communication mechanisms:
 * Kernel-space transfers: via UNIX sockets
 * Network transfers: via Linux syscalls `splice` and `vmsplice`
 
-## Experiments
+## Repository Structure
 
-Requirements:
-* Rust (>= 1.80)
-* WasmEdge runtime installed
-* Linux kernel with splice/vmsplice support
+```
+.
+├── README.md
+├── LICENSE
+├── .gitignore
+├── .gitmodules
+├── app/                         # Core crate (runtime + utils)
+│   ├── Cargo.toml
+│   ├── Cargo.lock
+│   ├── src/
+│   │   ├── main.rs
+│   │   ├── lib.rs
+│   │   ├── runtime.rs
+│   │   ├── data_hose.rs
+│   │   ├── remote_transfer.rs
+│   │   └── utils/
+│   │       ├── oci_utils.rs
+│   │       └── snapshot_utils.rs
+│   └── tests/
+│       ├── oci_utils_tests.rs
+│       ├── snapshot_utils_tests.rs
+│       ├── data_hose_tests.rs
+│       └── remote_transfer_tests.rs
+├── docs/
+│   └── install.md               # Extra installation notes
+├── experiments/
+│   ├── evaluation/              # Main evaluation harness
+│   │   ├── input-data/
+│   │   │   ├── README.md
+│   │   │   └── make-payloads.sh # Generates file_*M.txt payloads
+│   │   ├── binaries/            # Prebuilt containerd shims (for convenience)
+│   │   ├── scripts/
+│   │   │   ├── intra-inter-node-wasmedge.sh
+│   │   │   ├── intra-inter-node-container.sh
+│   │   │   ├── roadrunner-embedded.sh
+│   │   │   ├── roadrunner-kernel-mode.sh
+│   │   │   └── roadrunner-net-mode.sh
+│   │   └── wasmedge/            # WasmEdge source (as a submodule/overlay)
+│   │       ├── .git             # (submodule)
+│   │       ├── CMakeLists.txt
+│   │       └── ...
+│   └── motivation/              # Additional micro-benchmarks
+│       ├── results/
+│       │   ├── motivation-container.csv
+│       │   ├── motivation-wasmedge.csv
+│       │   ├── transfer-container.csv
+│       │   └── transfer-wasmedge.csv
+│       └── scripts/
+│           ├── run_image_resize.sh
+│           ├── run_wasm_image_resize.sh
+│           ├── parallel_run.sh
+│           └── parallel_run_wasm.sh
+├── examples/                    # Runnable examples (Roadrunner, Wasm and container)
+└── LICENSE
 
-Scenarios included:
+```
 
-* Sequential transfer – chained functions with varying payload sizes (1MB–500MB).
-* Fan-out scalability – parallel function workflows under increasing load.
+### Requirements:
 
-Results include:
+* Ubuntu 20.04/22.04 (x86_64) ( sudo access to install packages, configure runtime shims, manage containerd).
 
-* Latency
-* Throughput (RPS)
-* CPU and RAM usage
+* Rust (stable channel via rustup) — provides rustc and cargo
+
+* Docker Engine & CLI (24.x or newer recommended)
+
+* containerd (≥ 1.6) with CRI enabled
+
+* CRI-tools (crictl) (≥ 1.27)
+
+* WasmEdge v0.11.2
+
+* Redis Server (≥ 6.x)
+
+For full installation details see [Installation](docs/intall.md)

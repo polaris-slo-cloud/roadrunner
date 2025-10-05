@@ -1,0 +1,26 @@
+FROM debian:11 AS builder
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    curl cmake python3 pkg-config libssl-dev clang git build-essential
+
+# Install Rust manually
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable --profile minimal
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Add wasm32-wasip1 target (force full std installation)
+RUN rustup target add wasm32-wasip1
+
+# Clone and build RustPython
+RUN git clone https://github.com/RustPython/RustPython.git /rp
+WORKDIR /rp
+RUN /root/.cargo/bin/cargo build --release --target wasm32-wasip1 --features="freeze-stdlib"
+
+# Add sample Python script
+RUN echo 'print("Hello from RustPython in WasmEdge!")' > /rp/hello.py
+
+# Final image: pure scratch
+FROM scratch
+COPY --from=builder /rp/target/wasm32-wasip1/release/rustpython.wasm /rustpython.wasm
+COPY --from=builder /rp/hello.py /hello.py
+ENTRYPOINT ["/rustpython.wasm"]

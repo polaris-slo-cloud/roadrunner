@@ -1,0 +1,4 @@
+size,runtime,transfer_s,serialization_s,transfer_pct,serialization_pct
+1MB,wasmedge,0.017468757,0.013808238,55.85,44.15
+60MB,wasmedge,0.632984033,1.084127719,36.86,63.14
+100MB,wasmedge,1.295975991,1.555044937,45.45,54.55

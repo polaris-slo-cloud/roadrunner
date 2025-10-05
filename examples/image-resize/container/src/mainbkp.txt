@@ -1,0 +1,91 @@
+use image::{imageops::FilterType, ImageBuffer, Rgba};
+use image::codecs::jpeg::JpegEncoder;
+use std::fs::File;
+use std::io::{Write};
+use std::io;
+use std::path::Path;
+use image::{ Rgb};
+
+fn main() {
+    let scale_factor = 0.5;
+    let output_path = "resized.jpg";
+
+    let image_data = resize_image(scale_factor);
+
+    
+     match save_to_local(output_path, &image_data) {
+        Ok(path) => println!("✅ Image saved to: {}", path),
+        Err(e) => eprintln!("❌ Failed to save image: {}", e),
+    }
+    
+    println!("resize finished")
+}
+
+fn print_to_stdout(data: &[u8]) -> std::io::Result<()> {
+    let stdout = io::stdout();
+    let mut handle = stdout.lock();
+    handle.write_all(data)?;
+    Ok(())
+}
+
+fn save_to_local(path: &str, data: &[u8]) -> std::io::Result<String> {
+    let mut file = File::create(Path::new(path))?;
+    file.write_all(data)?;
+    Ok(path.to_string())
+}
+
+fn create_test_image(width: u32, height: u32) -> Vec<u8> {
+    
+    let img = ImageBuffer::<Rgba<u8>, Vec<u8>>::from_fn(width, height, |_x, _y| {
+        Rgba([255, 0, 0, 255]) // Red pixel
+    });
+
+    let rgb_img: ImageBuffer<Rgb<u8>, _> = ImageBuffer::from_fn(width, height, |x, y| {
+        let Rgba([r, g, b, _a]) = img.get_pixel(x, y);
+        Rgb([*r, *g, *b])
+    });
+   
+   let mut buffer = Vec::new();
+    {
+       let mut encoder = JpegEncoder::new_with_quality(&mut buffer, 80);
+        encoder
+        .encode(
+            rgb_img.as_raw(),
+            width,
+            height,
+            image::ExtendedColorType::Rgb8,
+        )
+        .expect("Failed to encode JPEG");
+    } 
+
+    buffer   
+
+}
+
+fn resize_image(scale_factor: f64) -> Vec<u8> {
+    let original_size = (720, 480);
+    let input_image = create_test_image(original_size.0, original_size.1);
+
+    let img = image::load_from_memory(&input_image).expect("Failed to decode image");
+
+    let new_width = (original_size.0 as f64 * scale_factor).round() as u32;
+    let new_height = (original_size.1 as f64 * scale_factor).round() as u32;
+
+    let resized = img.resize(new_width, new_height, FilterType::Nearest);
+    let rgb_image = resized.to_rgb8(); // ✅ convert to RGB
+
+    let mut buffer = Vec::new();
+    {
+        let mut encoder = JpegEncoder::new_with_quality(&mut buffer, 80);
+        encoder
+            .encode(
+                rgb_image.as_raw(),
+                rgb_image.width(),
+                rgb_image.height(),
+                image::ExtendedColorType::Rgb8, // ✅ must be Rgb8
+            )
+            .expect("Failed to encode JPEG");
+    }
+
+    buffer
+}

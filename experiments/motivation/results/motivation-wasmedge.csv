@@ -1,0 +1,3 @@
+app,runtime,pull_ms,unpack_ms,run_s,cold_start_s
+hello,wasmedge,34,960,0.260,0.994
+resize,wasmedge,41,978.8,4.651,1.0198

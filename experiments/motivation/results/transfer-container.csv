@@ -1,0 +1,4 @@
+size,runtime,transfer_s,serialization_s,transfer_pct,serialization_pct
+1MB,container,0.014581586,0.002361838,86.06,13.94
+60MB,container,0.593202801,0.073222246,89.01,10.99
+100MB,container,1.081091731,0.096302649,91.79,8.21
