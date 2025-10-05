@@ -52,48 +52,21 @@ It supports the following communication mechanisms:
 │   ├── Cargo.toml
 │   ├── Cargo.lock
 │   ├── src/
-│   │   ├── main.rs
-│   │   ├── lib.rs
-│   │   ├── runtime.rs
-│   │   ├── data_hose.rs
-│   │   ├── remote_transfer.rs
-│   │   └── utils/
-│   │       ├── oci_utils.rs
-│   │       └── snapshot_utils.rs
 │   └── tests/
-│       ├── oci_utils_tests.rs
-│       ├── snapshot_utils_tests.rs
-│       ├── data_hose_tests.rs
-│       └── remote_transfer_tests.rs
-├── docs/
-│   └── install.md               # Extra installation notes
+├── docs/                        # Extra installation notes
 ├── experiments/
 │   ├── evaluation/              # Main evaluation harness
 │   │   ├── input-data/
 │   │   │   ├── README.md
 │   │   │   └── make-payloads.sh # Generates file_*M.txt payloads
 │   │   ├── binaries/            # Prebuilt containerd shims (for convenience)
+│   │   │   └── wasmedge/            # WasmEdge source (as a submodule/overlay)
+│   │   │       ├── .git             # (submodule)
+│   │   │       └── ...
 │   │   ├── scripts/
-│   │   │   ├── intra-inter-node-wasmedge.sh
-│   │   │   ├── intra-inter-node-container.sh
-│   │   │   ├── roadrunner-embedded.sh
-│   │   │   ├── roadrunner-kernel-mode.sh
-│   │   │   └── roadrunner-net-mode.sh
-│   │   └── wasmedge/            # WasmEdge source (as a submodule/overlay)
-│   │       ├── .git             # (submodule)
-│   │       ├── CMakeLists.txt
-│   │       └── ...
 │   └── motivation/              # Additional micro-benchmarks
 │       ├── results/
-│       │   ├── motivation-container.csv
-│       │   ├── motivation-wasmedge.csv
-│       │   ├── transfer-container.csv
-│       │   └── transfer-wasmedge.csv
 │       └── scripts/
-│           ├── run_image_resize.sh
-│           ├── run_wasm_image_resize.sh
-│           ├── parallel_run.sh
-│           └── parallel_run_wasm.sh
 ├── examples/                    # Runnable examples (Roadrunner, Wasm and container)
 └── LICENSE
 
